@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStudentProfileRequest;
 use App\Http\Requests\UpdateStudentProfileRequest;
 use App\Models\StudentProfile;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StudentProfileController extends Controller
 {
-    public function index(): View
+    public function index(): Response
     {
         $this->authorize('students.manage');
 
@@ -26,7 +25,7 @@ class StudentProfileController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(): Response
     {
         $this->authorize('students.manage');
 
@@ -42,7 +41,7 @@ class StudentProfileController extends Controller
         return redirect()->route('students.index')->with('success', 'Mahasiswa berhasil ditambahkan.');
     }
 
-    public function show(StudentProfile $studentProfile): View
+    public function show(StudentProfile $studentProfile): Response
     {
         $this->authorize('view', $studentProfile);
 
@@ -51,7 +50,7 @@ class StudentProfileController extends Controller
         ]);
     }
 
-    public function edit(StudentProfile $studentProfile): View
+    public function edit(StudentProfile $studentProfile): Response
     {
         $this->authorize('update', $studentProfile);
 
