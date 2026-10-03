@@ -1,8 +1,8 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
 
@@ -21,12 +21,30 @@ export default function RoleManagement() {
                     <CardContent>
                         <form onSubmit={(e) => { e.preventDefault(); post(route('users.roles.assign', data.user_id), { onSuccess: () => reset() }); }} className="flex gap-3 items-end">
                             <div className="flex-1">
-                                <Label htmlFor="user_id">User ID (UUID)</Label>
-                                <Input id="user_id" value={data.user_id} onChange={(v) => setData('user_id', v.target.value)} placeholder="01a0fb10-..." />
+                                <Label htmlFor="user_id">Pilih User</Label>
+                                <Select value={data.user_id} onValueChange={(v) => setData('user_id', v)}>
+                                    <SelectTrigger id="user_id" className="w-full">
+                                        <SelectValue placeholder="Pilih mahasiswa..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {users?.data?.map((u: any) => (
+                                            <SelectItem key={u.id} value={u.id}>{u.name} ({u.id.substring(0, 8)}...)</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="flex-1">
                                 <Label htmlFor="role_name">Role</Label>
-                                <Input id="role_name" value={data.role_name} onChange={(v) => setData('role_name', v.target.value)} placeholder="mahasiswa / komting / ..." />
+                                <Select value={data.role_name} onValueChange={(v) => setData('role_name', v)}>
+                                    <SelectTrigger id="role_name" className="w-full">
+                                        <SelectValue placeholder="Pilih role..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {roles?.map((r: any) => (
+                                            <SelectItem key={r.id} value={r.name}>{r.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <Button type="submit" disabled={processing}>Assign</Button>
                         </form>
