@@ -19,7 +19,7 @@ export default function RoleManagement() {
                 <Card className="mb-6">
                     <CardHeader><CardTitle>Assign Role</CardTitle></CardHeader>
                     <CardContent>
-                        <form onSubmit={(e) => { e.preventDefault(); post(route('users.roles.assign', data.user_id), { onSuccess: () => reset() }); }} className="flex gap-3 items-end">
+                        <form onSubmit={(e) => { e.preventDefault(); post('/users/' + data.user_id + '/role', { onSuccess: () => reset() }); }} className="flex gap-3 items-end">
                             <div className="flex-1">
                                 <Label htmlFor="user_id">Pilih User</Label>
                                 <Select value={data.user_id} onValueChange={(v) => setData('user_id', v)}>

@@ -20,7 +20,7 @@ export default function StudentsEdit({ profile }: { profile: any }) {
                 <h1 className="text-2xl font-bold mb-6">Edit Mahasiswa</h1>
                 <Card>
                     <CardContent className="pt-6 space-y-4">
-                        <form onSubmit={(e) => { e.preventDefault(); put(route('students.update', profile.id)); }}>
+                        <form onSubmit={(e) => { e.preventDefault(); put('/students/' + profile.id); }}>
                             <div className="space-y-2">
                                 <Label htmlFor="npm">NPM</Label>
                                 <Input id="npm" value={data.npm} onChange={(v) => setData('npm', v.target.value)} />
@@ -43,7 +43,7 @@ export default function StudentsEdit({ profile }: { profile: any }) {
                             </div>
                             <div className="flex gap-2 pt-4">
                                 <Button type="submit" disabled={processing}>Simpan</Button>
-                                <Link href={route('students.index')}><Button variant="outline">Batal</Button></Link>
+                                <Link href={'/students'}><Button variant="outline">Batal</Button></Link>
                             </div>
                         </form>
                     </CardContent>

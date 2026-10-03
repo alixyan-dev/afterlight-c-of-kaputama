@@ -10,7 +10,7 @@ export default function StudentsIndex({ profiles }: PageProps) {
             <div className="container mx-auto p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Data Mahasiswa</h1>
-                    <Link href={route('students.create')}>
+                    <Link href={'/students/create'}>
                         <Button>+ Tambah Mahasiswa</Button>
                     </Link>
                 </div>
@@ -28,8 +28,8 @@ export default function StudentsIndex({ profiles }: PageProps) {
                                         <td>{p.phone || '-'}</td>
                                         <td>{p.status === 'active' ? 'Aktif' : 'Nonaktif'}</td>
                                         <td className="space-x-2">
-                                            <Link href={route('students.edit', p.id)}><Button size="sm">Edit</Button></Link>
-                                            <Link href={route('students.show', p.id)}><Button size="sm" variant="outline">Detail</Button></Link>
+                                            <Link href={'/students/' + p.id + '/edit'}><Button size="sm">Edit</Button></Link>
+                                            <Link href={'/students/' + p.id}><Button size="sm" variant="outline">Detail</Button></Link>
                                         </td>
                                     </tr>
                                 ))}

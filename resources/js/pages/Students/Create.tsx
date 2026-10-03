@@ -21,7 +21,7 @@ export default function StudentsCreate() {
                 <h1 className="text-2xl font-bold mb-6">Tambah Mahasiswa</h1>
                 <Card>
                     <CardContent className="pt-6 space-y-4">
-                        <form onSubmit={(e) => { e.preventDefault(); post(route('students.store')); }}>
+                        <form onSubmit={(e) => { e.preventDefault(); post('/students'); }}>
                             <div className="space-y-2">
                                 <Label htmlFor="npm">NPM</Label>
                                 <Input id="npm" value={data.npm} onChange={(v) => setData('npm', v.target.value)} placeholder="Contoh: 2023001" />
@@ -42,7 +42,7 @@ export default function StudentsCreate() {
                             </div>
                             <div className="flex gap-2 pt-4">
                                 <Button type="submit" disabled={processing}>Simpan</Button>
-                                <Link href={route('students.index')}><Button variant="outline">Batal</Button></Link>
+                                <Link href={'/students'}><Button variant="outline">Batal</Button></Link>
                             </div>
                         </form>
                     </CardContent>
