@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,7 +11,7 @@ Route::middleware(['auth'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
     Route::middleware('permission:students.manage')->group(function () {
-        Route::resource('students', StudentProfileController::class)->names([
+        Route::resource('students', StudentController::class)->names([
             'index' => 'students.index',
             'create' => 'students.create',
             'store' => 'students.store',

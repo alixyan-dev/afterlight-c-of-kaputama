@@ -5,8 +5,10 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -37,7 +39,17 @@ class User extends Authenticatable
     /**
      * The user belongs to one student profile.
      */
-    public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        if (! $search) {
+            return $query;
+        }
+
+        return $query->where('name', 'ilike', "%{$search}%")
+            ->orWhere('email', 'ilike', "%{$search}%");
+    }
+
+    public function studentProfile(): HasOne
     {
         return $this->hasOne(StudentProfile::class, 'user_id');
     }

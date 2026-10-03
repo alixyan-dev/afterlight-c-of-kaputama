@@ -34,6 +34,16 @@ class StudentProfile extends BaseModel
     /**
      * The student belongs to a user account.
      */
+    public function scopeSearch(\Illuminate\Database\Eloquent\Builder $query, ?string $search): \Illuminate\Database\Eloquent\Builder
+    {
+        if (! $search) {
+            return $query;
+        }
+
+        return $query->where('name', 'ilike', "%{$search}%")
+            ->orWhere('email', 'ilike', "%{$search}%");
+    }
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
