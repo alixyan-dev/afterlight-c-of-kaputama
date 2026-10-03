@@ -38,4 +38,15 @@ class StudentProfile extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function scopeSearch(\Illuminate\Database\Eloquent\Builder $query, ?string $search): \Illuminate\Database\Eloquent\Builder
+    {
+        if (! $search) {
+            return $query;
+        }
+
+        return $query->where('npm', 'ilike', "%{$search}%")
+            ->orWhere('class_name', 'ilike', "%{$search}%")
+            ->orWhere('phone', 'ilike', "%{$search}%");
+    }
 }

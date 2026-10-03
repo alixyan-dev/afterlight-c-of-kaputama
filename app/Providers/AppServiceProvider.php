@@ -30,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manageRoles', function (User $user) {
             return $user->hasRole('komting');
         });
+
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\StudentProfile::class, \App\Policies\StudentProfilePolicy::class);
     }
 
     /**
