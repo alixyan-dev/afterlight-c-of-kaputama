@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Student\StudentService;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\Activitylog\Facades\Activity;
 
 class StudentController extends Controller
 {
+    public function __construct(
+        protected StudentService $studentService,
+    ) {}
+
     /**
      * Display a listing of student users with search, filter, and sort.
      */
@@ -20,46 +23,19 @@ class StudentController extends Controller
     {
         $this->authorize('students.manage');
 
-        $users = User::with('roles')
-            ->whereHas('roles', fn ($q) => $q->where('name', 'mahasiswa'));
-
-        // Search by name or email
-        $search = request('search');
-        if ($search) {
-            $users->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('email', 'ilike', "%{$search}%");
-            });
-        }
-
-        // Filter by status
-        $status = request('status');
-        if ($status === 'active') {
-            $users->where('is_active', true);
-        } elseif ($status === 'inactive') {
-            $users->where('is_active', false);
-        }
-
-        // Sort
-        $allowedSorts = ['name', 'email', 'is_active', 'created_at'];
-        $sort = request('sort', 'name');
-        $direction = request('direction', 'asc');
-
-        if (! in_array($sort, $allowedSorts, true)) {
-            $sort = 'name';
-        }
-
-        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
-        $users->orderBy($sort, $direction);
-
-        $users = $users->paginate(10)->withQueryString();
+        $users = $this->studentService->listStudents(
+            search: request('search'),
+            status: request('status'),
+            sort: request('sort', 'name'),
+            direction: request('direction', 'asc'),
+        );
 
         return Inertia::render('Students/Index', [
             'users' => $users,
-            'search' => $search,
+            'search' => request('search'),
             'status' => request('status'),
-            'sort' => $sort,
-            'direction' => $direction,
+            'sort' => request('sort', 'name'),
+            'direction' => request('direction', 'asc'),
             'reset_password' => session('reset_password'),
             'reset_student_name' => session('reset_student_name'),
         ]);
@@ -82,12 +58,7 @@ class StudentController extends Controller
     {
         $this->authorize('students.manage');
 
-        $user = User::create($request->validated());
-        $user->assignRole('mahasiswa');
-
-        Activity::causedBy(auth()->user())
-            ->performedOn($user)
-            ->log('Akun mahasiswa dibuat');
+        $this->studentService->createStudent($request->validated());
 
         return redirect()
             ->route('students.index')
@@ -102,7 +73,7 @@ class StudentController extends Controller
         $this->authorize('students.manage');
 
         return Inertia::render('Students/Show', [
-            'student' => $student->load('roles', 'studentProfile'),
+            'student' => $this->studentService->findById($student->id),
         ]);
     }
 
@@ -125,11 +96,7 @@ class StudentController extends Controller
     {
         $this->authorize('students.manage');
 
-        $student->update($request->validated());
-
-        Activity::causedBy(auth()->user())
-            ->performedOn($student)
-            ->log('Data akun mahasiswa diperbarui');
+        $this->studentService->updateStudent($student, $request->validated());
 
         return redirect()
             ->route('students.index')
@@ -143,11 +110,7 @@ class StudentController extends Controller
     {
         $this->authorize('students.manage');
 
-        Activity::causedBy(auth()->user())
-            ->performedOn($student)
-            ->log('Akun mahasiswa dihapus');
-
-        $student->delete();
+        $this->studentService->deleteStudent($student);
 
         return redirect()
             ->route('students.index')
@@ -161,13 +124,7 @@ class StudentController extends Controller
     {
         $this->authorize('students.manage');
 
-        $plainPassword = Str::random(4).'-'.Str::random(4).'-'.Str::random(4);
-
-        $student->update(['password' => $plainPassword]);
-
-        Activity::causedBy(auth()->user())
-            ->performedOn($student)
-            ->log('Password direset');
+        $plainPassword = $this->studentService->resetPassword($student);
 
         return back()->with([
             'reset_password' => $plainPassword,
