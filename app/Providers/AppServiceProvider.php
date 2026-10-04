@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         \Illuminate\Support\Facades\Gate::policy(\App\Models\StudentProfile::class, \App\Policies\StudentProfilePolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Course::class, \App\Policies\CoursePolicy::class);
     }
 
     /**
