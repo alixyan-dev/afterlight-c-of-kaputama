@@ -149,27 +149,27 @@ export default function StudentsIndex({
             <Head title="Data Mahasiswa" />
             <div className="container mx-auto p-6">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
                     <h1 className="text-2xl font-bold">Data Mahasiswa</h1>
                     <Link href="/students/create">
-                        <Button>+ Tambah Mahasiswa</Button>
+                        <Button className="w-full md:w-auto">+ Tambah Mahasiswa</Button>
                     </Link>
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-3 mb-4">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
                     <Input
                         placeholder="Cari nama / email..."
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         onKeyDown={handleSearch}
-                        className="max-w-xs"
+                        className="w-full sm:max-w-xs"
                     />
                     <Select
                         value={status ?? 'all'}
                         onValueChange={handleStatusChange}
                     >
-                        <SelectTrigger className="w-40">
+                        <SelectTrigger className="w-full sm:w-40">
                             <SelectValue placeholder="Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -183,7 +183,8 @@ export default function StudentsIndex({
                 {/* Table */}
                 <Card>
                     <CardContent className="pt-6">
-                        <table className="w-full text-sm">
+                        <div className="overflow-x-auto rounded-md border border-border/50">
+                        <table className="w-full text-sm min-w-[640px]">
                             <thead>
                                 <tr className="border-b">
                                     <th
@@ -231,27 +232,43 @@ export default function StudentsIndex({
                                         <td className="py-3">
                                             <div className="flex justify-end gap-2">
                                                 <Link href={`/students/${user.id}/edit`}>
-                                                    <Button size="sm" variant="outline">
+                                                    <Button size="sm" variant="outline" className="hidden sm:inline-flex gap-1.5">
                                                         <Pencil className="size-3.5" />
-                                                        Edit
+                                                        <span className="hidden md:inline">Edit</span>
                                                     </Button>
                                                 </Link>
                                                 <Button
                                                     size="sm"
                                                     variant="destructive"
                                                     onClick={() => setDeleteTarget(user)}
+                                                    className="hidden sm:inline-flex gap-1.5"
                                                 >
                                                     <Trash2 className="size-3.5" />
-                                                    Hapus
+                                                    <span className="hidden md:inline">Hapus</span>
                                                 </Button>
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={() => handleResetPassword(user)}
+                                                    className="hidden sm:inline-flex gap-1.5"
                                                 >
                                                     <KeyRound className="size-3.5" />
-                                                    Reset
+                                                    <span className="hidden md:inline">Reset</span>
                                                 </Button>
+                                                {/* Mobile icon-only buttons */}
+                                                <div className="flex gap-1 sm:hidden">
+                                                    <Link href={`/students/${user.id}/edit`}>
+                                                        <Button size="icon" variant="outline" className="h-8 w-8">
+                                                            <Pencil className="size-3.5" />
+                                                        </Button>
+                                                    </Link>
+                                                    <Button size="icon" variant="destructive" className="h-8 w-8" onClick={() => setDeleteTarget(user)}>
+                                                        <Trash2 className="size-3.5" />
+                                                    </Button>
+                                                    <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => handleResetPassword(user)}>
+                                                        <KeyRound className="size-3.5" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -272,8 +289,8 @@ export default function StudentsIndex({
                         {/* Pagination */}
                         {users && users.last_page > 1 && (
                             <div className="flex items-center justify-between mt-4 text-sm">
-                                <span className="text-muted-foreground">
-                                    Halaman {users.current_page} dari {users.last_page}
+                                <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
+                                    {users.current_page} / {users.last_page}
                                 </span>
                                 <div className="flex gap-2">
                                     <Button
@@ -281,20 +298,23 @@ export default function StudentsIndex({
                                         variant="outline"
                                         disabled={users.current_page <= 1}
                                         onClick={() => goPage(users.current_page - 1)}
+                                        className="text-xs"
                                     >
-                                        ← Sebelumnya
+                                        ←
                                     </Button>
                                     <Button
                                         size="sm"
                                         variant="outline"
                                         disabled={users.current_page >= users.last_page}
                                         onClick={() => goPage(users.current_page + 1)}
+                                        className="text-xs"
                                     >
-                                        Berikutnya →
+                                        →
                                     </Button>
                                 </div>
                             </div>
                         )}
+                        </div>
                     </CardContent>
                 </Card>
 
