@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])
             ->name('students.reset-password');
+    });
+
+    Route::middleware('permission:courses.manage')->group(function () {
+        Route::resource('semesters', SemesterController::class);
     });
 
     Route::middleware('permission:roles.assign')->group(function () {
