@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:courses.manage')->group(function () {
         Route::resource('semesters', SemesterController::class);
         Route::resource('courses', CourseController::class);
+        Route::inertia('schedule', 'Schedule')->name('schedule');
     });
 
     Route::middleware('permission:roles.assign')->group(function () {
