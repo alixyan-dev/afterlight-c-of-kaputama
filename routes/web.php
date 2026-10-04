@@ -32,6 +32,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('courses', CourseController::class);
     });
 
+    Route::middleware('permission:meetings.view')->group(function () {
+        Route::resource('meetings', \App\Http\Controllers\MeetingController::class);
+    });
+
     // Schedule accessible to all authenticated users
     Route::get('schedule', [\App\Http\Controllers\ScheduleController::class, 'index'])->name('schedule');
 
