@@ -1,16 +1,28 @@
-import { Head, useForm } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Link } from '@inertiajs/react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
-export default function StudentsEdit({ profile }: { profile: any }) {
+interface Student {
+    id: string;
+    name: string;
+    email: string;
+    is_active: boolean;
+}
+
+export default function StudentsEdit({ student }: { student: Student }) {
     const { data, setData, put, processing, errors } = useForm({
-        npm: profile.npm,
-        class_name: profile.class_name || '',
-        phone: profile.phone || '',
-        status: profile.status,
+        name: student.name,
+        email: student.email,
+        is_active: student.is_active,
     });
 
     return (
@@ -19,31 +31,61 @@ export default function StudentsEdit({ profile }: { profile: any }) {
             <div className="container mx-auto p-6 max-w-lg">
                 <h1 className="text-2xl font-bold mb-6">Edit Mahasiswa</h1>
                 <Card>
-                    <CardContent className="pt-6 space-y-4">
-                        <form onSubmit={(e) => { e.preventDefault(); put('/students/' + profile.id); }}>
+                    <CardContent className="pt-6">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                put(`/students/${student.id}`);
+                            }}
+                            className="space-y-4"
+                        >
                             <div className="space-y-2">
-                                <Label htmlFor="npm">NPM</Label>
-                                <Input id="npm" value={data.npm} onChange={(v) => setData('npm', v.target.value)} />
-                                {errors.npm && <p className="text-sm text-red-500">{errors.npm}</p>}
+                                <Label htmlFor="name">Nama</Label>
+                                <Input
+                                    id="name"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                />
+                                {errors.name && (
+                                    <p className="text-sm text-red-500">{errors.name}</p>
+                                )}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="class_name">Kelas</Label>
-                                <Input id="class_name" value={data.class_name} onChange={(v) => setData('class_name', v.target.value)} />
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={data.email}
+                                    onChange={(e) => setData('email', e.target.value)}
+                                />
+                                {errors.email && (
+                                    <p className="text-sm text-red-500">{errors.email}</p>
+                                )}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="phone">Telepon</Label>
-                                <Input id="phone" value={data.phone} onChange={(v) => setData('phone', v.target.value)} />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="status">Status</Label>
-                                <select id="status" value={data.status} onChange={(v) => setData('status', v.target.value)} className="w-full rounded-md border px-3 py-2 text-sm">
-                                    <option value="active">Aktif</option>
-                                    <option value="inactive">Nonaktif</option>
-                                </select>
+                                <Label>Status</Label>
+                                <Select
+                                    value={String(data.is_active)}
+                                    onValueChange={(value) =>
+                                        setData('is_active', value === 'true')
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="true">Aktif</SelectItem>
+                                        <SelectItem value="false">Nonaktif</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="flex gap-2 pt-4">
-                                <Button type="submit" disabled={processing}>Simpan</Button>
-                                <Link href={'/students'}><Button variant="outline">Batal</Button></Link>
+                                <Button type="submit" disabled={processing}>
+                                    Simpan
+                                </Button>
+                                <Link href="/students">
+                                    <Button variant="outline">Batal</Button>
+                                </Link>
                             </div>
                         </form>
                     </CardContent>

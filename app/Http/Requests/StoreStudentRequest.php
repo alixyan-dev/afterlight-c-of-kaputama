@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreStudentRequest extends FormRequest
 {
@@ -13,6 +11,9 @@ class StoreStudentRequest extends FormRequest
         return $this->user()?->can('students.manage') ?? false;
     }
 
+    /**
+     * @return array<string, list<string>>
+     */
     public function rules(): array
     {
         return [

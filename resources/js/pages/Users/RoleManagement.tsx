@@ -4,10 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link } from '@inertiajs/react';
-import { PageProps } from '@/types';
-
 export default function RoleManagement() {
-    const { users, roles, auth } = usePage<PageProps>().props;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { users, roles, auth } = usePage().props as any;
     const { data, setData, post, processing, reset } = useForm({ role_name: '', user_id: '' });
 
     return (

@@ -45,8 +45,10 @@ class User extends Authenticatable
             return $query;
         }
 
-        return $query->where('name', 'ilike', "%{$search}%")
-            ->orWhere('email', 'ilike', "%{$search}%");
+        return $query->where(function (Builder $q) use ($search) {
+            $q->where('name', 'ilike', "%{$search}%")
+                ->orWhere('email', 'ilike', "%{$search}%");
+        });
     }
 
     public function studentProfile(): HasOne

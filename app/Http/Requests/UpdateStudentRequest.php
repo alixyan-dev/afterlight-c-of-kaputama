@@ -13,10 +13,13 @@ class UpdateStudentRequest extends FormRequest
         return $this->user()?->can('students.manage') ?? false;
     }
 
+    /**
+     * @return array<string, list<string>>
+     */
     public function rules(): array
     {
-        $user = $this->route('student') ?? $this->route('user');
-        $userId = is_string($user) ? $user : ($user?->id ?? null);
+        /** @var User $student */
+        $student = $this->route('student');
 
         return [
             'name' => ['required', 'string', 'max:255'],
@@ -25,7 +28,7 @@ class UpdateStudentRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($userId, 'id'),
+                Rule::unique('users', 'email')->ignore($student),
             ],
             'is_active' => ['required', 'boolean'],
         ];

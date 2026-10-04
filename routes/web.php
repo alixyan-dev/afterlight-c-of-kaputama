@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -20,6 +19,9 @@ Route::middleware(['auth'])->group(function () {
             'update' => 'students.update',
             'destroy' => 'students.destroy',
         ]);
+
+        Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])
+            ->name('students.reset-password');
     });
 
     Route::middleware('permission:roles.assign')->group(function () {
