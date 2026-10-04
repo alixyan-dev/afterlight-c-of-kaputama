@@ -29,13 +29,14 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:courses.manage')->group(function () {
         Route::resource('semesters', SemesterController::class);
         Route::resource('courses', CourseController::class);
-        // Schedule dengan data semester
-        Route::get('schedule', function () {
-            return \Inertia\Inertia::render('Schedule', [
-                'semesters' => \App\Models\Semester::orderBy('start_date', 'desc')->get(),
-            ]);
-        })->name('schedule');
     });
+
+    // Schedule accessible to all authenticated users
+    Route::get('schedule', function () {
+        return \Inertia\Inertia::render('Schedule', [
+            'semesters' => \App\Models\Semester::orderBy('start_date', 'desc')->get(),
+        ]);
+    })->name('schedule');
 
     Route::middleware('permission:roles.assign')->group(function () {
         Route::get('users/roles', [RoleController::class, 'index'])->name('users.roles.index');
