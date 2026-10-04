@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -32,11 +33,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Schedule accessible to all authenticated users
-    Route::get('schedule', function () {
-        return \Inertia\Inertia::render('Schedule', [
-            'semesters' => \App\Models\Semester::orderBy('start_date', 'desc')->get(),
-        ]);
-    })->name('schedule');
+    Route::get('schedule', [\App\Http\Controllers\ScheduleController::class, 'index'])->name('schedule');
 
     Route::middleware('permission:roles.assign')->group(function () {
         Route::get('users/roles', [RoleController::class, 'index'])->name('users.roles.index');
