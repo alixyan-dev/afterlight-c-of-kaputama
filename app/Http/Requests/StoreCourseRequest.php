@@ -12,18 +12,22 @@ class StoreCourseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('courses.manage') ?? false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'code' => ['required', 'string', 'max:20', 'unique:courses,code'],
+            'name' => ['required', 'string', 'max:255'],
+            'lecturer_name' => ['required', 'string', 'max:255'],
+            'day_of_week' => ['required', 'string', 'max:20'],
+            'start_time' => ['required', 'date_format:H:i'],
+            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
+            'room' => ['nullable', 'string', 'max:100'],
+            'description' => ['nullable', 'string'],
+            'is_active' => ['required', 'boolean'],
+            'semester_id' => ['nullable', 'exists:semesters,id'],
         ];
     }
 }

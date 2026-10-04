@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudentController;
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware('permission:courses.manage')->group(function () {
         Route::resource('semesters', SemesterController::class);
+        Route::resource('courses', CourseController::class);
     });
 
     Route::middleware('permission:roles.assign')->group(function () {

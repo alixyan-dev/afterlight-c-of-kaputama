@@ -2,64 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): Response
     {
-        //
+        $this->authorize('courses.manage');
+
+        return Inertia::render('Courses/Index', [
+            'courses' => Course::with('semester')->paginate(10),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): Response
     {
-        //
+        $this->authorize('courses.manage');
+        return Inertia::render('Courses/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCourseRequest $request): RedirectResponse
     {
-        //
+        $this->authorize('courses.manage');
+        Course::create($request->validated());
+        return redirect('/courses')->with('success', 'Mata kuliah dibuat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Course $course)
+    public function edit(Course $course): Response
     {
-        //
+        $this->authorize('courses.manage');
+        return Inertia::render('Courses/Edit', ['course' => $course]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Course $course)
+    public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
     {
-        //
+        $this->authorize('courses.manage');
+        $course->update($request->validated());
+        return redirect('/courses')->with('success', 'Mata kuliah diperbarui.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Course $course)
+    public function destroy(Course $course): RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Course $course)
-    {
-        //
+        $this->authorize('courses.manage');
+        $course->delete();
+        return redirect('/courses')->with('success', 'Mata kuliah dihapus.');
     }
 }
