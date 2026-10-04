@@ -1,4 +1,5 @@
-import { Head, Link, useState } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
