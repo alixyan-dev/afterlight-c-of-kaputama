@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware('permission:meetings.view')->group(function () {
         Route::resource('meetings', \App\Http\Controllers\MeetingController::class);
+        Route::post('meetings/{meeting}/submit', [\App\Http\Controllers\MeetingController::class, 'submit'])->name('meetings.submit');
+        Route::post('meetings/{meeting}/validate', [\App\Http\Controllers\MeetingController::class, 'validate'])->name('meetings.validate');
     });
 
     // Schedule accessible to all authenticated users
