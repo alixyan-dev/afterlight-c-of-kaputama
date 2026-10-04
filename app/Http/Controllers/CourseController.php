@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use App\Models\Semester;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +24,9 @@ class CourseController extends Controller
     public function create(): Response
     {
         $this->authorize('courses.manage');
-        return Inertia::render('Courses/Create');
+        return Inertia::render('Courses/Create', [
+            'semesters' => Semester::orderBy('start_date', 'desc')->get(),
+        ]);
     }
 
     public function store(StoreCourseRequest $request): RedirectResponse
@@ -36,7 +39,10 @@ class CourseController extends Controller
     public function edit(Course $course): Response
     {
         $this->authorize('courses.manage');
-        return Inertia::render('Courses/Edit', ['course' => $course]);
+        return Inertia::render('Courses/Edit', [
+            'course' => $course,
+            'semesters' => Semester::orderBy('start_date', 'desc')->get(),
+        ]);
     }
 
     public function update(UpdateCourseRequest $request, Course $course): RedirectResponse

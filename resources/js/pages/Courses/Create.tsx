@@ -4,7 +4,36 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
-export default function CoursesCreate() {
-    const { data, setData, post, processing } = useForm({ code: '', name: '', lecturer_name: '', day_of_week: '', start_time: '', end_time: '', room: '', description: '', is_active: true });
-    return (<><Head title="Tambah Mata Kuliah" /><div className="container mx-auto p-6 max-w-2xl"><h1 className="text-2xl font-bold mb-6">Tambah Mata Kuliah</h1><Card><CardContent className="pt-6 space-y-4"><form onSubmit={e => { e.preventDefault(); post('/courses'); }} className="grid md:grid-cols-2 gap-4"><div><Label htmlFor="code">Kode</Label><Input id="code" value={data.code} onChange={e => setData('code', e.target.value)} /></div><div><Label htmlFor="name">Nama</Label><Input id="name" value={data.name} onChange={e => setData('name', e.target.value)} /></div><div><Label htmlFor="lecturer_name">Dosen</Label><Input id="lecturer_name" value={data.lecturer_name} onChange={e => setData('lecturer_name', e.target.value)} /></div><div><Label htmlFor="day_of_week">Hari</Label><Input id="day_of_week" value={data.day_of_week} onChange={e => setData('day_of_week', e.target.value)} /></div><div><Label htmlFor="start_time">Mulai</Label><Input type="time" id="start_time" value={data.start_time} onChange={e => setData('start_time', e.target.value)} /></div><div><Label htmlFor="end_time">Selesai</Label><Input type="time" id="end_time" value={data.end_time} onChange={e => setData('end_time', e.target.value)} /></div><div><Label htmlFor="room">Ruangan</Label><Input id="room" value={data.room || ''} onChange={e => setData('room', e.target.value)} /></div><div className="md:col-span-2"><Button type="submit" disabled={processing}>Simpan</Button><Link href="/courses" className="ml-2"><Button variant="outline" type="button">Batal</Button></Link></div></form></CardContent></Card></div></>);
+export default function CoursesCreate({ semesters }: { semesters?: Array<{ id: string; name: string }> }) {
+    const { data, setData, post, processing } = useForm({ code: '', name: '', lecturer_name: '', day_of_week: '', start_time: '', end_time: '', room: '', description: '', is_active: true, semester_id: '' });
+    return (<>
+        <Head title="Tambah Mata Kuliah" />
+        <div className="container mx-auto p-6 max-w-2xl">
+            <h1 className="text-2xl font-bold mb-6">Tambah Mata Kuliah</h1>
+            <Card>
+                <CardContent className="pt-6 space-y-4">
+                    <form onSubmit={e => { e.preventDefault(); post('/courses'); }} className="grid md:grid-cols-2 gap-4">
+                        <div><Label htmlFor="code">Kode</Label><Input id="code" value={data.code} onChange={e => setData('code', e.target.value)} /></div>
+                        <div><Label htmlFor="name">Nama</Label><Input id="name" value={data.name} onChange={e => setData('name', e.target.value)} /></div>
+                        <div><Label htmlFor="lecturer_name">Dosen</Label><Input id="lecturer_name" value={data.lecturer_name} onChange={e => setData('lecturer_name', e.target.value)} /></div>
+                        <div>
+                            <Label htmlFor="semester_id">Semester</Label>
+                            <select id="semester_id" value={data.semester_id} onChange={e => setData('semester_id', e.target.value)} className="w-full rounded-md border px-3 py-2 text-sm bg-background">
+                                <option value="">Pilih Semester</option>
+                                {semesters?.map((s: any) => <option key={s.id} value={s.id}>{s.name} — {s.academic_year}</option>)}
+                            </select>
+                        </div>
+                        <div><Label htmlFor="day_of_week">Hari</Label><Input id="day_of_week" value={data.day_of_week} onChange={e => setData('day_of_week', e.target.value)} /></div>
+                        <div><Label htmlFor="start_time">Mulai</Label><Input type="time" id="start_time" value={data.start_time} onChange={e => setData('start_time', e.target.value)} /></div>
+                        <div><Label htmlFor="end_time">Selesai</Label><Input type="time" id="end_time" value={data.end_time} onChange={e => setData('end_time', e.target.value)} /></div>
+                        <div><Label htmlFor="room">Ruangan</Label><Input id="room" value={data.room || ''} onChange={e => setData('room', e.target.value)} /></div>
+                        <div className="md:col-span-2">
+                            <Button type="submit" disabled={processing}>Simpan</Button>
+                            <Link href="/courses" className="ml-2"><Button variant="outline" type="button">Batal</Button></Link>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    </>);
 }
