@@ -188,48 +188,48 @@ export default function StudentsIndex({
                             <thead>
                                 <tr className="border-b">
                                     <th
-                                        className="py-3 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
+                                        className="py-3 px-4 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
                                         onClick={() => handleSort('name')}
                                     >
                                         Nama <SortIcon column="name" />
                                     </th>
                                     <th
-                                        className="py-3 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
+                                        className="py-3 px-4 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
                                         onClick={() => handleSort('email')}
                                     >
                                         Email <SortIcon column="email" />
                                     </th>
                                     <th
-                                        className="py-3 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
+                                        className="py-3 px-4 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
                                         onClick={() => handleSort('is_active')}
                                     >
                                         Status <SortIcon column="is_active" />
                                     </th>
                                     <th
-                                        className="py-3 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
+                                        className="py-3 px-4 text-left font-medium cursor-pointer select-none hover:text-foreground/70 transition-colors"
                                         onClick={() => handleSort('created_at')}
                                     >
                                         Dibuat <SortIcon column="created_at" />
                                     </th>
-                                    <th className="py-3 text-right font-medium">Aksi</th>
+                                    <th className="py-3 px-4 text-right font-medium">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {users?.data?.map((user) => (
                                     <tr key={user.id} className="border-b last:border-0">
-                                        <td className="py-3">{user.name}</td>
-                                        <td className="py-3 text-muted-foreground">{user.email}</td>
-                                        <td className="py-3">
+                                        <td className="py-3 px-4">{user.name}</td>
+                                        <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
+                                        <td className="py-3 px-4">
                                             <Badge
                                                 variant={user.is_active ? 'default' : 'secondary'}
                                             >
                                                 {user.is_active ? 'Aktif' : 'Nonaktif'}
                                             </Badge>
                                         </td>
-                                        <td className="py-3 text-muted-foreground">
+                                        <td className="py-3 px-4 text-muted-foreground">
                                             {formatDate(user.created_at)}
                                         </td>
-                                        <td className="py-3">
+                                        <td className="py-3 px-4">
                                             <div className="flex justify-end gap-2">
                                                 <Link href={`/students/${user.id}/edit`}>
                                                     <Button size="sm" variant="outline" className="hidden sm:inline-flex gap-1.5">
