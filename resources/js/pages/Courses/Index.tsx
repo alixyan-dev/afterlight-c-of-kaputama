@@ -1,3 +1,4 @@
+import { Input } from '@/components/ui/input';
 import { Head, Link } from '@inertiajs/react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,11 @@ export default function CoursesIndex({ courses }: { courses: any }) {
                     <h1 className="text-2xl font-bold">Mata Kuliah</h1>
                     <Link href="/courses/create"><Button>+ Tambah Mata Kuliah</Button></Link>
                 </div>
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <Input placeholder="Cari kode / nama..." className="w-full sm:max-w-xs" />
+                    <select className="w-full sm:w-40 rounded-md border px-3 py-2 text-sm bg-background"><option>Semua Semester</option><option>Aktif</option><option>Nonaktif</option></select>
+                </div>
+
                 <Card>
                     <CardContent className="pt-6">
                         <div className="overflow-x-auto rounded-md border border-border/50">

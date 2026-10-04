@@ -29,7 +29,12 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:courses.manage')->group(function () {
         Route::resource('semesters', SemesterController::class);
         Route::resource('courses', CourseController::class);
-        Route::inertia('schedule', 'Schedule')->name('schedule');
+        // Schedule dengan data semester
+        Route::get('schedule', function () {
+            return \Inertia\Inertia::render('Schedule', [
+                'semesters' => \App\Models\Semester::orderBy('start_date', 'desc')->get(),
+            ]);
+        })->name('schedule');
     });
 
     Route::middleware('permission:roles.assign')->group(function () {

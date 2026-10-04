@@ -2,7 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Pencil, Trash2 } from 'lucide-react';
 
 interface Semester {
@@ -35,6 +35,15 @@ export default function SemestersIndex({ semesters }: Props) {
                     <Link href="/semesters/create">
                         <Button className="w-full md:w-auto">+ Tambah Semester</Button>
                     </Link>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <Input placeholder="Cari semester..." className="w-full sm:max-w-xs" />
+                    <select className="w-full sm:w-40 rounded-md border px-3 py-2 text-sm bg-background">
+                        <option>Semua</option>
+                        <option>Aktif</option>
+                        <option>Nonaktif</option>
+                    </select>
                 </div>
 
                 <Card>
